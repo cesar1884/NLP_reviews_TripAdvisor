@@ -2,6 +2,9 @@
 
 # TripAdvisor Reviews Prediction and Topic Modeling
 
+![image](https://github.com/cesar1884/NLP_reviews_TripAdvisor/assets/94693373/a0f0fda3-a353-48f1-80e6-81d5afdee8cb)
+
+
 This project explores TripAdvisor reviews with a focus on predicting ratings from review text utilizing Machine Learning (ML) and Deep Learning (DL) techniques. Beyond rating prediction, the analysis aims to unearth the factors that contribute to a hotel's appeal or lack thereof. By examining prevalent topics in reviews, the intention is to offer actionable insights to hotels and platforms like booking.com on areas for improvement to elevate the customer experience.
 
 ## Installation
@@ -56,6 +59,7 @@ The cleaned data is available in the `data/cleaned_tripadvisor_reviews.csv` file
    - Utilizing deep learning for potentially better results.
 5. `notebooks/topic_modelling.ipynb`:
    - Topic modelling to discover prevalent themes in reviews.
+   
 
 ## Results
 
@@ -131,7 +135,6 @@ mapping = {1: 'negative', 2: 'negative', 3: 'medium/good', 4: 'medium/good', 5: 
 Class remapping led to better results in terms of recall for the classes of interest and global F1 score. Classical machine learning techniques ultimately outperformed deep learning in this scenario, perhaps due to the lack of data.
 
 
-
 # Topic modelling
 
 ![image](https://github.com/cesar1884/NLP_reviews_TripAdvisor/assets/94693373/831ee9f8-61a0-4dd7-bc65-fc2893c6c5cc)
@@ -154,5 +157,6 @@ Adjust the parameter λ modify the weight of the distictiveness, and this is so 
 
 With this λ topic 4 confirm our observation that it was the only one that contained a negative words as it seem now to contains a lot of negative words. we can consider them as bad hotel even if it is a really different topic than the others but it is an helpful topic for our study. 
 An hotel has to do all possible effort to be out of this topic. We have there a list of the things that customers hate the most in what they consider as a bad hotel. this way you know that if you do not focus on these subject you will be classified as a bad hotel
+
 ---
 
