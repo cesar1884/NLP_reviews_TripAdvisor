@@ -143,7 +143,7 @@ While looking at these 4 topices we can try to understand how they were created:
 - topic 3 is not really clear as it contains a lot of verbs that does not give insight ( we could have removed them ?) but an interesting thing is the fact that it is the only topic that cntains a negative word "bad"
 - topic 4 really focus on the room. on this type of hotel we can clearly say that people are mainly interested about the quality of the room
 
-[Visualisation LDAvis](https://nbviewer.org/github/cesar1884/NLP_reviews_TripAdvisor/blob/main/notebooks/topic_modelling.ipynb)
+[Visualisation LDAvis](https://cesar1884.github.io/NLP_reviews_TripAdvisor/LDAvis.html)
 
 The left part shows the distance between different topics. the size of the circle indicate if lot of review are related to this topic. topic 1 and 3 that correspond to topic 2 and 4 of our precedent plot are really close to each others.
 
