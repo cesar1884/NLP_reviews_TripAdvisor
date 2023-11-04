@@ -2,6 +2,9 @@
 
 # TripAdvisor Reviews Prediction and Topic Modeling
 
+![image](https://github.com/cesar1884/NLP_reviews_TripAdvisor/assets/94693373/a0f0fda3-a353-48f1-80e6-81d5afdee8cb)
+
+
 This project explores TripAdvisor reviews with a focus on predicting ratings from review text utilizing Machine Learning (ML) and Deep Learning (DL) techniques. Beyond rating prediction, the analysis aims to unearth the factors that contribute to a hotel's appeal or lack thereof. By examining prevalent topics in reviews, the intention is to offer actionable insights to hotels and platforms like booking.com on areas for improvement to elevate the customer experience.
 
 ## Installation
@@ -56,10 +59,104 @@ The cleaned data is available in the `data/cleaned_tripadvisor_reviews.csv` file
    - Utilizing deep learning for potentially better results.
 5. `notebooks/topic_modelling.ipynb`:
    - Topic modelling to discover prevalent themes in reviews.
+   
 
 ## Results
 
+The primary metric of interest was not accuracy, but the recall for classes 2 and 3, and the overall F1 score, due to the unequal data distribution among classes.
+
+## Problem Statement
+
+The main challenge encountered with this dataset is achieving a sufficient recall for classes 2 and 3, which contain relatively fewer data compared classes 3 and 4 (class 1 contains few datas but the model is generally able to find them).
+
+## Initial Approach with Classical Machine Learning
+
+### Experimentation and Results
+- **Techniques Employed**: To counter the class imbalance, techniques like `class_weight` and oversampling with SMOTE were tried.
+- **Model Employed**: The model that yielded the best results is a text classifier based on Logistic Regression with a `TfidfVectorizer` as a vectorizer.
+    ```python
+    classifier = TextClassifier(
+        model=LogisticRegression(
+            max_iter=100, 
+            class_weight='balanced', 
+            penalty='l2', 
+            C=0.1, 
+            multi_class='ovr',
+            fit_intercept=False, 
+            solver='newton-cg'
+        ), 
+        vectorizer=TfidfVectorizer(
+            max_features=20000, 
+            stop_words='english'
+        )
+    )
+    ```
+- **Results**: 
+    - Accuracy: 60.89%
+    - Recall for Class 2: 56%
+    - Recall for Class 3: 42%
+    - Global F1 Score: 55% (macro avg)
+
+## Exploration with Deep Learning
+
+### Challenges Encountered
+- Moving to deep learning revealed an overfitting problem, likely exacerbated by the lack of data.
+
+### Model Employed and Results
+- A sequential model with an embedding layer, Bi-LSTM, dropout, and a dense layer was employed.
+    ```python
+    model = Sequential([
+        Embedding(MAX_VOCAB_SIZE, EMBEDDING_DIM, input_length=MAX_SEQUENCE_LENGTH),
+        Bidirectional(LSTM(64, kernel_regularizer=l2(0.01), recurrent_regularizer=l2(0.01))),  
+        Dropout(0.5),  
+        Dense(5, activation='softmax', kernel_regularizer=l2(0.01), activity_regularizer=l2(0.01))  
+    ])
+    ```
+
+![image](https://github.com/cesar1884/NLP_reviews_TripAdvisor/assets/94693373/0b4aafb2-5098-4cd6-ba23-3eb0c0567d0a)
+
+The curves are not so satisfying...
+
+## Class Remapping and Final Results
+
+To simplify the problem and achieve better results, class remapping was performed as follows:
+```python
+mapping = {1: 'negative', 2: 'negative', 3: 'medium/good', 4: 'medium/good', 5: 'excellent'}
+```
+- **Results with Remapping**:
+    - Accuracy: 73.02%
+    - Recall for 'negative' category: 87%
+    - Global F1 Score: 74% (macro avg)
+ 
+  These results are achieved with the ML model presented before that gave the best results after remapping too
+
+### Conclusion
+
+Class remapping led to better results in terms of recall for the classes of interest and global F1 score. Classical machine learning techniques ultimately outperformed deep learning in this scenario, perhaps due to the lack of data.
+
+
+# Topic modelling
+
 ![image](https://github.com/cesar1884/NLP_reviews_TripAdvisor/assets/94693373/831ee9f8-61a0-4dd7-bc65-fc2893c6c5cc)
+
+While looking at these 4 topices we can try to understand how they were created:
+- topic 1 is related to resort, "dream holidays hotel", all inclusive, ... this type of hotels (interesting to see the importance of bigram there with punta_cana) there the thingss that interest people is the beach, bar, food and the pool. 
+- topic 2 is related to city hotel. there people are more focused about the location, the staff and the confort
+- topic 3 is not really clear as it contains a lot of verbs that does not give insight ( we could have removed them ?) but an interesting thing is the fact that it is the only topic that cntains a negative word "bad"
+- topic 4 really focus on the room. on this type of hotel we can clearly say that people are mainly interested about the quality of the room
+
+[Visualisation LDAvis](https://github.com/cesar1884/NLP_reviews_TripAdvisor/blob/main/LDAvis.html)
+
+The left part shows the distance between different topics. the size of the circle indicate if lot of review are related to this topic. topic 1 and 3 that correspond to topic 2 and 4 of our precedent plot are really close to each others.
+
+the right part show the top 30 terms by saliency. saliency measure the number of apparition of a words in the review bt also measure the apparation in this topic comparated  to the others topic: a words that appears a lot in this topic but not much in the others will have a high saliency. And it is an incredible insight for us to us as it allows us to measure the importance of a word for a category of hotel.
+
+This way we can say that for each type of hotel that correspond to a particular topic. thy should focus on the words with high saliency. The more they considered them as part of a "topic" the more they have to focus on these subject. 
+
+Adjust the parameter λ modify the weight of the distictiveness, and this is so usefull to establish our hotel type classes. with a low  λ  distinctuveness is high and then we clearly noitce that 1 and 3 are city hotel. 1 contain a lot of cities with a lot of offices and focus on the location comparated to the station and things like that so we can consider them as business hotel while 3 focus on touristic cities and touristic place so we can considere them as city trip hotel.
+
+With this λ topic 4 confirm our observation that it was the only one that contained a negative words as it seem now to contains a lot of negative words. we can consider them as bad hotel even if it is a really different topic than the others but it is an helpful topic for our study. 
+An hotel has to do all possible effort to be out of this topic. We have there a list of the things that customers hate the most in what they consider as a bad hotel. this way you know that if you do not focus on these subject you will be classified as a bad hotel
 
 ---
 
