@@ -1,5 +1,3 @@
----
-
 # TripAdvisor Reviews Prediction and Topic Modeling
 
 ![image](https://github.com/cesar1884/NLP_reviews_TripAdvisor/assets/94693373/a0f0fda3-a353-48f1-80e6-81d5afdee8cb)
@@ -158,5 +156,4 @@ Adjust the parameter λ modify the weight of the distictiveness, and this is so 
 With this λ topic 4 confirm our observation that it was the only one that contained a negative words as it seem now to contains a lot of negative words. we can consider them as bad hotel even if it is a really different topic than the others but it is an helpful topic for our study. 
 An hotel has to do all possible effort to be out of this topic. We have there a list of the things that customers hate the most in what they consider as a bad hotel. this way you know that if you do not focus on these subject you will be classified as a bad hotel
 
----
 
