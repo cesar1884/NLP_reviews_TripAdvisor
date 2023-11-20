@@ -117,10 +117,11 @@ To simplify the problem and achieve better results, class remapping was performe
 ```python
 mapping = {1: 'negative', 2: 'negative', 3: 'negative', 4: 'good', 5: 'excellent'}
 
+```
 - It makes senses as from a Rate of 3 people will start to be mefiants while looking for an hotel on their phone. 
 - This remapping allows to approximately equalize the number of instances in each category, which will facilitate the interpretation of the model's outputs. However as we seen in EDA it will probably lead to a lot of misclassification between Good and Negative as 4 was often miscclasified with 3
 
-```
+
 - **Results with Remapping**:
     - Accuracy: 72%
     - Recall for 'good' category: 61%
