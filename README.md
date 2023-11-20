@@ -5,7 +5,7 @@
 ![image](https://github.com/cesar1884/NLP_reviews_TripAdvisor/assets/94693373/a0f0fda3-a353-48f1-80e6-81d5afdee8cb)
 
 
-This project explores TripAdvisor reviews with a focus on predicting ratings from review text utilizing Machine Learning (ML) and Deep Learning (DL) techniques. Beyond rating prediction, the analysis aims to unearth the factors that contribute to a hotel's appeal or lack thereof. By examining prevalent topics in reviews, the intention is to offer actionable insights to hotels and platforms like booking.com on areas for improvement to elevate the customer experience.
+This project explores TripAdvisor reviews with a focus on predicting ratings from review text utilizing Machine Learning (ML) and Deep Learning (DL) techniques. Beyond rating prediction, the analysis aims to reveal the factors that contribute to a hotel's appeal or lack thereof. By examining prevalent topics in reviews, the intention is to offer actionable insights to hotels and platforms like booking.com on areas for improvement to elevate the customer experience.
 
 ## Installation
 
@@ -67,7 +67,7 @@ The primary metric of interest was not accuracy, but the recall for classes 2 an
 
 ## Problem Statement
 
-The main challenge encountered with this dataset is achieving a sufficient recall for classes 2 and 3, which contain relatively fewer data compared classes 3 and 4 (class 1 contains few datas but the model is generally able to find them).
+The main challenge encountered with this dataset is achieving a sufficient recall for classes 2 and 3, which contain relatively fewer data compared classes 3 and 4 (class 1 contains few datas but the model is generally able to classify them).
 
 ## Initial Approach with Classical Machine Learning
 
@@ -92,9 +92,9 @@ The main challenge encountered with this dataset is achieving a sufficient recal
     )
     ```
 - **Results**: 
-    - Accuracy: 60.89%
-    - Recall for Class 2: 56%
-    - Recall for Class 3: 42%
+    - Accuracy: 63.43%
+    - Recall for Class 2: 51%
+    - Recall for Class 3: 32%
     - Global F1 Score: 55% (macro avg)
 
 ## Exploration with Deep Learning
@@ -106,11 +106,11 @@ The main challenge encountered with this dataset is achieving a sufficient recal
 - A sequential model with an embedding layer, Bi-LSTM, dropout, and a dense layer was employed.
     ```python
     model = Sequential([
-        Embedding(MAX_VOCAB_SIZE, EMBEDDING_DIM, input_length=MAX_SEQUENCE_LENGTH),
-        Bidirectional(LSTM(64, kernel_regularizer=l2(0.01), recurrent_regularizer=l2(0.01))),  
-        Dropout(0.5),  
-        Dense(5, activation='softmax', kernel_regularizer=l2(0.01), activity_regularizer=l2(0.01))  
-    ])
+      Embedding(MAX_VOCAB_SIZE, EMBEDDING_DIM, input_length=MAX_SEQUENCE_LENGTH),
+      Bidirectional(LSTM(64)),  # Bi-LSTM
+      Dropout(0.2),
+      Dense(5, activation='softmax')
+   ])
     ```
 
 ![image](https://github.com/cesar1884/NLP_reviews_TripAdvisor/assets/94693373/0b4aafb2-5098-4cd6-ba23-3eb0c0567d0a)
@@ -121,25 +121,25 @@ The curves are not so satisfying...
 
 To simplify the problem and achieve better results, class remapping was performed as follows:
 ```python
-mapping = {1: 'negative', 2: 'negative', 3: 'medium/good', 4: 'medium/good', 5: 'excellent'}
+mapping = {1: 'negative', 2: 'negative', 3: 'negative', 4: 'good', 5: 'excellent'}
 ```
 - **Results with Remapping**:
-    - Accuracy: 73.02%
-    - Recall for 'negative' category: 87%
-    - Global F1 Score: 74% (macro avg)
+    - Accuracy: 71.48%
+    - Recall for 'good' category: 47%
+    - Global F1 Score: 70% (macro avg)
  
   These results are achieved with the ML model presented before that gave the best results after remapping too
 
 ### Conclusion
 
-Class remapping led to better results in terms of recall for the classes of interest and global F1 score. Classical machine learning techniques ultimately outperformed deep learning in this scenario, perhaps due to the lack of data.
+Class remapping led to better results in terms of recall for the classes of interest and global F1 score. Classical machine learning techniques ultimately got result equivalent to deep learning in this scenario, perhaps due to the lack of data.
 
 
 # Topic modelling
 
 ![image](https://github.com/cesar1884/NLP_reviews_TripAdvisor/assets/94693373/831ee9f8-61a0-4dd7-bc65-fc2893c6c5cc)
 
-While looking at these 4 topices we can try to understand how they were created:
+While looking at these 4 topics we can try to understand how they were created:
 - topic 1 is related to resort, "dream holidays hotel", all inclusive, ... this type of hotels (interesting to see the importance of bigram there with punta_cana) there the thingss that interest people is the beach, bar, food and the pool. 
 - topic 2 is related to city hotel. there people are more focused about the location, the staff and the confort
 - topic 3 is not really clear as it contains a lot of verbs that does not give insight ( we could have removed them ?) but an interesting thing is the fact that it is the only topic that cntains a negative word "bad"

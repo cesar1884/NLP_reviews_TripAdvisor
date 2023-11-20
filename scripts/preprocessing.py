@@ -1,13 +1,13 @@
-import re  # noqa: F401
-import string  # noqa: F401
+import re  
+import string  
 
-import nltk  # noqa: F401
+import nltk  
 import pandas as pd
-from nltk.corpus import stopwords, wordnet  # noqa: F401
-from nltk.stem import WordNetLemmatizer  # noqa: F401
-from sklearn.pipeline import Pipeline  # noqa: F401
-from sklearn.preprocessing import FunctionTransformer  # noqa: F401
-from utils import emojis_unicode, emoticons, slang_words  # noqa: F401
+from nltk.corpus import stopwords, wordnet  
+from nltk.stem import WordNetLemmatizer  
+from sklearn.pipeline import Pipeline 
+from sklearn.preprocessing import FunctionTransformer 
+# from utils import slang_words  
 from collections import Counter
 from spellchecker import SpellChecker
 
@@ -51,53 +51,53 @@ def lemmatize_words(text: str) -> str:
     return ' '.join(lemmatized_pos_tagged_text)
 
 # emoticons conversion
-def convert_emoticons(text :str) -> str:
+# def convert_emoticons(text :str) -> str:
 
-    EMOTICONS = emoticons()
-    for emoticon, description in EMOTICONS.items():
-        cleaned_description = re.sub(",", "", description)
-        joined_description = "_".join(cleaned_description.split())
-        pattern = u'('+re.escape(emoticon)+')'
-        text = re.sub(pattern, joined_description, text)
-    return text
+#     EMOTICONS = emoticons()
+#     for emoticon, description in EMOTICONS.items():
+#         cleaned_description = re.sub(",", "", description)
+#         joined_description = "_".join(cleaned_description.split())
+#         pattern = u'('+re.escape(emoticon)+')'
+#         text = re.sub(pattern, joined_description, text)
+#     return text
 
 # emoji conversion
-def convert_emojis(text :str) -> str:
+# def convert_emojis(text :str) -> str:
 
-    EMO_UNICODE = emojis_unicode()
-    for emoji_code, emoji in EMO_UNICODE.items():
-        description = emoji_code.strip(":")  
-        no_commas = re.sub(",", "", description)
-        joined_description = "_".join(no_commas.split())
-        pattern = u'('+re.escape(emoji)+')'
-        text = re.sub(pattern, joined_description, text)
-    return text
+#     EMO_UNICODE = emojis_unicode()
+#     for emoji_code, emoji in EMO_UNICODE.items():
+#         description = emoji_code.strip(":")  
+#         no_commas = re.sub(",", "", description)
+#         joined_description = "_".join(no_commas.split())
+#         pattern = u'('+re.escape(emoji)+')'
+#         text = re.sub(pattern, joined_description, text)
+#     return text
 
-# urls removal
-def remove_urls(text :str) -> str:
+#  urls removal
+# def remove_urls(text :str) -> str:
 
-    url_pattern = re.compile(r'https?://\S+|www\.\S+')
-    return url_pattern.sub(r'', text)
+#     url_pattern = re.compile(r'https?://\S+|www\.\S+')
+#     return url_pattern.sub(r'', text)
 
 # html tags removal
-def remove_html(text :str) -> str:
+# def remove_html(text :str) -> str:
     
-    html_pattern = re.compile('<.*?>')
-    return html_pattern.sub(r'', text)
+#     html_pattern = re.compile('<.*?>')
+#     return html_pattern.sub(r'', text)
 
 # chat words conversion
-def chat_words_conversion(text: str) -> str:
-    slang_words_list = slang_words()
-    chat_words_list = list(slang_words_list.keys())
-    new_text = []
+# def chat_words_conversion(text: str) -> str:
+#     slang_words_list = slang_words()
+#     chat_words_list = list(slang_words_list.keys())
+#     new_text = []
     
-    for word in text.split():
-        if word.upper() in chat_words_list:
-            new_text.append(slang_words_list[word.upper()])
-        else:
-            new_text.append(word)
+#     for word in text.split():
+#         if word.upper() in chat_words_list:
+#             new_text.append(slang_words_list[word.upper()])
+#         else:
+#             new_text.append(word)
 
-    return ' '.join(new_text)
+#     return ' '.join(new_text)
 
 #spelling correction
 def correct_spellings(text: str) -> str:
