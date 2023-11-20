@@ -111,12 +111,6 @@ The main challenge encountered with this dataset is achieving a sufficient recal
    ])
     ```
 
-![image](![image](https://github.com/cesar1884/NLP_reviews_TripAdvisor/assets/94693373/0276ef05-948d-4865-a235-329b5c5f8a61)
-)
-)
-
-We notice overfitting but results are not so bad comparated to the difficulty of the task and lack of data
-
 ## Class Remapping and Final Results
 
 To simplify the problem and achieve better results, class remapping was performed as follows:
