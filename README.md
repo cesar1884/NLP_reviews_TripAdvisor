@@ -70,7 +70,7 @@ The main challenge encountered with this dataset is achieving a sufficient recal
 ## Initial Approach with Classical Machine Learning
 
 ### Experimentation and Results
-- **Techniques Employed**: To counter the class imbalance, techniques like `class_weight` and oversampling with SMOTE were tried.
+- **Techniques Employed**: To counter the class imbalance, `class_weight` was tried. Tried some processing techniques as bi grams, remove rare and common words. hyperparameter tuning
 - **Model Employed**: The model that yielded the best results is a text classifier based on Logistic Regression with a `TfidfVectorizer` as a vectorizer.
     ```python
     classifier = TextClassifier(
@@ -90,9 +90,9 @@ The main challenge encountered with this dataset is achieving a sufficient recal
     )
     ```
 - **Results**: 
-    - Accuracy: 63.43%
-    - Recall for Class 2: 51%
-    - Recall for Class 3: 32%
+    - Accuracy: 61%
+    - Recall for Class 2: 48%
+    - Recall for Class 3: 44%
     - Global F1 Score: 55% (macro avg)
 
 ## Exploration with Deep Learning
@@ -101,7 +101,7 @@ The main challenge encountered with this dataset is achieving a sufficient recal
 - Moving to deep learning revealed an overfitting problem, likely exacerbated by the lack of data.
 
 ### Model Employed and Results
-- A sequential model with an embedding layer, Bi-LSTM, dropout, and a dense layer was employed.
+- A sequential model with an embedding layer, Bi-LSTM, dropout, and a dense layer had the best results.
     ```python
     model = Sequential([
       Embedding(MAX_VOCAB_SIZE, EMBEDDING_DIM, input_length=MAX_SEQUENCE_LENGTH),
@@ -111,26 +111,32 @@ The main challenge encountered with this dataset is achieving a sufficient recal
    ])
     ```
 
-![image](https://github.com/cesar1884/NLP_reviews_TripAdvisor/assets/94693373/0b4aafb2-5098-4cd6-ba23-3eb0c0567d0a)
+![image](![image](https://github.com/cesar1884/NLP_reviews_TripAdvisor/assets/94693373/0276ef05-948d-4865-a235-329b5c5f8a61)
+)
+)
 
-The curves are not so satisfying...
+We notice overfitting but results are not so bad comparated to the difficulty of the task and lack of data
 
 ## Class Remapping and Final Results
 
 To simplify the problem and achieve better results, class remapping was performed as follows:
 ```python
 mapping = {1: 'negative', 2: 'negative', 3: 'negative', 4: 'good', 5: 'excellent'}
+
+- It makes senses as from a Rate of 3 people will start to be mefiants while looking for an hotel on their phone. 
+- This remapping allows to approximately equalize the number of instances in each category, which will facilitate the interpretation of the model's outputs. However as we seen in EDA it will probably lead to a lot of misclassification between Good and Negative as 4 was often miscclasified with 3
+
 ```
 - **Results with Remapping**:
-    - Accuracy: 71.48%
-    - Recall for 'good' category: 47%
-    - Global F1 Score: 70% (macro avg)
+    - Accuracy: 72%
+    - Recall for 'good' category: 61%
+    - Global F1 Score: 72% (macro avg)
  
-  These results are achieved with the ML model presented before that gave the best results after remapping too
+  These results are achieved with the DL model presented just before and after creating a set of classification rules based on probabilities given by softmax ( see more at the end of the notebook "Deep Learning"
 
 ### Conclusion
 
-Class remapping led to better results in terms of recall for the classes of interest and global F1 score. Classical machine learning techniques ultimately got result equivalent to deep learning in this scenario, perhaps due to the lack of data.
+Class remapping led to better results in terms of Accuracy and macro F1 score. Deep learning learning techniques ultimately got result best result in this scenario, but is not really outperforming the ML model. By working more on the ML model we may have as good result.
 
 
 # Topic modelling
