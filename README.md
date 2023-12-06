@@ -61,7 +61,7 @@ The cleaned data is available in the `data/cleaned_tripadvisor_reviews.csv` file
 
 ## Results
 
-The primary metric of interest was not accuracy, but the recall for classes 2 and 3, and the overall F1 score, due to the unequal data distribution among classes.
+Due to the unequal data distribution among classes, the primary metric of interest was not accuracy, I mainly focused on the macro average F1 score and on the recall for classes 2 and 3
 
 ## Problem Statement
 
@@ -69,28 +69,22 @@ The main challenge encountered with this dataset is achieving a sufficient recal
 
 ## Initial Approach with Classical Machine Learning
 
-# ***just change result from there***
-
 
 ### Experimentation and Results 
 - **Techniques Employed**: To counter the class imbalance, `class_weight` was tried. Tried some processing techniques as bi grams, remove rare and common words. hyperparameter tuning
 - **Model Employed**: The model that yielded the best results is a text classifier based on Logistic Regression with a `TfidfVectorizer` as a vectorizer.
     ```python
     classifier = TextClassifier(
-        model=LogisticRegression(
-            max_iter=100, 
-            class_weight='balanced', 
-            penalty='l2', 
-            C=0.1, 
-            multi_class='ovr',
-            fit_intercept=False, 
-            solver='newton-cg'
-        ), 
-        vectorizer=TfidfVectorizer(
-            max_features=20000, 
-            stop_words='english'
-        )
+       model=LogisticRegression(
+          max_iter=1000,
+          class_weight='balanced'
+          ),
+       vectorizer=TfidfVectorizer(
+          max_features=5000,
+          stop_words='english'
+       )
     )
+
     ```
 - **Results**: 
     - Accuracy: 61%
@@ -101,14 +95,14 @@ The main challenge encountered with this dataset is achieving a sufficient recal
 ## Exploration with Deep Learning
 
 ### Challenges Encountered
-- Moving to deep learning revealed an overfitting problem, likely exacerbated by the lack of data.
+- Moving to deep learning revealed that probably due to the lack of data our models were very likely to overfit. 
 
 ### Model Employed and Results
 - A sequential model with an embedding layer, Bi-LSTM, dropout, and a dense layer had the best results.
     ```python
     model = Sequential([
       Embedding(MAX_VOCAB_SIZE, EMBEDDING_DIM, input_length=MAX_SEQUENCE_LENGTH),
-      Bidirectional(LSTM(64)),  # Bi-LSTM
+      Bidirectional(LSTM(64)), 
       Dropout(0.2),
       Dense(5, activation='softmax')
    ])
@@ -127,14 +121,14 @@ mapping = {1: 'negative', 2: 'negative', 3: 'negative', 4: 'good', 5: 'excellent
 
 - **Results with Remapping**:
     - Accuracy: 72%
-    - Recall for 'good' category: 61%
-    - Global F1 Score: 72% (macro avg)
+    - Recall for 'good' category: 60%
+    - Global F1 Score: 71% (macro avg)
  
   These results are achieved with the DL model presented just before and after creating a set of classification rules based on probabilities given by softmax ( see more at the end of the notebook "Deep Learning"
 
 ### Conclusion
 
-Class remapping led to better results in terms of Accuracy and macro F1 score. Deep learning learning techniques ultimately got result best result in this scenario, but is not really outperforming the ML model. By working more on the ML model we may have as good result.
+Class remapping led to better results in terms of Accuracy and macro F1 score. Deep learning learning techniques ultimately got best result in this scenario, but is not really outperforming the ML model. By working more on the ML model we may have as good result.
 
 
 # Topic modelling
