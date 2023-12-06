@@ -130,6 +130,8 @@ mapping = {1: 'negative', 2: 'negative', 3: 'negative', 4: 'good', 5: 'excellent
 
 Class remapping led to better results in terms of Accuracy and macro F1 score. Deep learning learning techniques ultimately got best result in this scenario, but is not really outperforming the ML model. By working more on the ML model we may have as good result.
 
+To really integrate our prediction model into our process to define what make an hotel good or not, we could next analyze which feature are important for our models / most common words in each class. An Interest possibility that I'm willing to implement is to preprocess our datas into bigram of this form : Adjective + Element as for exemple Good_Breakfast, Amazing_Pool. A model trained on these datas could give really interesting insight and have a good explainabilty.
+
 
 # Topic modelling
 
